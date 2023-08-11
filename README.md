@@ -1,8 +1,10 @@
 # PHP strict types
 
 This script verifies if each new PHP files has the **declare(strict_types=1);** directive.
-
 If not, it can automatically be added by adding the **--fix** option.
+
+Retrieve the list of new files between the branch previous commit and the current commit.
+**Files must be committed when this script is executed.**
 
 ## Usage
 
