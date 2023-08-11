@@ -66,7 +66,7 @@ main() {
     exit 1
   fi
 
-  # Retrieve the list of new files between the branch main and the current commit.
+  # Retrieve the list of new files between the branch previous commit and the current commit.
   # Files must be committed when this script is executed.
   # ("awk -F ' ' '{print $6}'" allow to get the 6th column of the previous command.
   diff_files=$(git diff --diff-filter=A HEAD^1 HEAD --raw -- $PATHS_TO_CHECK | awk -F ' ' '{print $6}')
