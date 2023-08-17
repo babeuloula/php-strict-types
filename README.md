@@ -9,8 +9,8 @@ Retrieve the list of new files between the branch previous commit and the curren
 ## Usage
 
 ```shell
-php-strict-types <paths to check> options
-# php-strict-types src tests --fix
+php-strict-types options <paths to check>
+# php-strict-types --fix src tests
 ```
 
 ## Options
