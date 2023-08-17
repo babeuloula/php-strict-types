@@ -2,41 +2,37 @@
 
 set -e
 
-readonly RESET=$(tput sgr0) # Reset color and text style
+readonly RESET='\033[0;0m' # Reset color and text style
 
 readonly RED='\033[0;31m' # Color red
 readonly GREEN='\033[0;32m' # Color green
 readonly BLUE='\033[0;34m' # Color blue
 
-readonly BOLD=$(tput bold) # Bold text
+readonly SOFTWARE_NAME="${GREEN}PHP declare(strict_types=1); directive checker & fixer${RESET}"
 
-readonly SOFTWARE_NAME="${GREEN}PHP ${BOLD}declare(strict_types=1);${RESET} ${GREEN}directive checker & fixer${RESET}"
-
-echo "${SOFTWARE_NAME}"
-echo "Version ${BOLD}1.0.0${RESET} by ${BOLD}BaBeuloula${RESET} (https://github.com/babeuloula/php-strict-types).\n"
+echo -e "${SOFTWARE_NAME}"
+echo -e "Version 1.0.1 by BaBeuloula (https://github.com/babeuloula/php-strict-types).\n"
 
 display_help() {
-    cat <<-END
-This script verifies if each new PHP files has the ${BOLD}declare(strict_types=1);${RESET} directive.
-If not, it can automatically be added by adding the ${BOLD}--fix${RESET} option.
+    echo -e "This script verifies if each new PHP files has the declare(strict_types=1); directive.
+If not, it can automatically be added by adding the --fix option.
 
 Usage:
-    $(basename "$0") <paths to check> options
+    $(basename "$0") options <paths to check>
 
 Options:
     --fix                   Fix the files by adding the directive
     --check                 Check if the files have the directive (default mode)
 
     --help                  Display help
-
-END
+"
     exit 0
 }
 
 main() {
   MODE="check" # Determine if the script must fix the files or just check
 
-  eval set -- $(getopt -q --long help,fix,check: -n "${SOFTWARE_NAME}" -- "$@")
+  eval set -- $(getopt -q --long help,fix,check -n "${SOFTWARE_NAME}" -- "$@")
   while true; do
     case "$1" in
       --fix)
@@ -62,7 +58,7 @@ main() {
   PATHS_TO_CHECK=$@ # List of path to check as arguments
 
   if [ -z "${PATHS_TO_CHECK}" ]; then
-    echo "${RED}You must specify the paths to check (ex: ${BOLD}$0 foo bar --${MODE}${RESET}${RED}).${RESET}"
+    echo -e "${RED}You must specify the paths to check (ex: $0 foo bar --${MODE}).${RESET}"
     exit 1
   fi
 
@@ -81,24 +77,24 @@ main() {
 
   # If there are no files found, we can return a success.
   if [ -z "$error_files" ]; then
-    echo "${GREEN} 👏 All new files have the directive.${RESET}"
+    echo -e "${GREEN} 👏 All new files have the directive.${RESET}"
     exit 0
   fi
 
   if [ "${MODE}" = "check" ]; then
     # If the mode is "check", we output all files.
-    echo "Missing ${BOLD}declare(strict_types=1)${RESET} directive in file(s):"
+    echo -e "Missing declare(strict_types=1) directive in file(s):"
     for file in $error_files; do
-      echo " ${RED}✘${RESET} $file"
+      echo -e " ${RED}✘${RESET} $file"
     done
     exit 1
   fi
 
   # Otherwise, we fix all the files in error by add the directive.
-  echo "Fixing ${BOLD}declare(strict_types=1)${RESET} directive in file(s):"
+  echo -e "Fixing declare(strict_types=1) directive in file(s):"
   for file in $error_files; do
     sed -i "s/<?php/<?php\r\rdeclare(strict_types=1);/g" $file
-    echo " ${GREEN}✔${RESET} $file"
+    echo -e " ${GREEN}✔${RESET} $file"
   done
 }
 
