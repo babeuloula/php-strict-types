@@ -93,7 +93,7 @@ main() {
   # Otherwise, we fix all the files in error by add the directive.
   echo -e "Fixing declare(strict_types=1) directive in file(s):"
   for file in $error_files; do
-    sed -i "s/<?php/<?php\r\rdeclare(strict_types=1);/g" $file
+    sed -i "s/<?php/<?php\n\ndeclare(strict_types=1);/g" $file
     echo -e " ${GREEN}✔${RESET} $file"
   done
 }
